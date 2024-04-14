@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;0&display=swap');
+
+#category-banner{
+    width: 100%;
+    height:300px;
+    background-color: turquoise;
+    overflow: auto;
+    background-image: url('/static/reviewapp/images/cat0.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    transition: background 0.4s ease;
+    font-family: "Poppins", sans-serif !important;
+}
+
+.select-wrapper {
+    margin-top: 110px;
+    
+}
+
+#category-dropdown{
+    font-size: 30px;
+    border-radius: 50px;
+    padding: 15px 70px 15px 40px;
+    text-align-last:center;
+    border:none;
+
+    -webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	 -o-appearance: none;
+        appearance: none;
+    
+}
+
+.select-wrapper span {
+  	content: '\f107';
+    font-size: 28px;
+    position: relative;
+    left: -50px;
+  	color: turquoise;
+  	pointer-events: none;
+}
+
+.restaurant-card{
+    width: 300px;
+    height: 300px;
+    float: left;
+    /* float: center; */
+    margin: 10px;
+    border-radius: 30px;
+    overflow: hidden;
+    font-family: "Poppins", sans-serif !important;
+}
+#restaurants-list{
+    /* justify-content: center; */
+    padding-left: 25px;
+    font-family: "Poppins", sans-serif !important;
+}
+.restaurant-card:hover{
+    border: 5px solid white;
+}
+
+.pricing{
+    color: #4CAF50;
+}
+
+.rating{
+    color:orange;
+}
+
+.restaurant-image{
+    overflow: hidden; 
+    width: 300px; 
+    height:200px;
+}
+#restaurants-list{
+    display: inline-block;
+    overflow: hidden;
+}
+#restaurants-list-wrapper{
+    text-align: center; 
+    padding:30px; 
+    width:100%;
+}

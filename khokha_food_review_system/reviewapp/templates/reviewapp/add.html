@@ -1,0 +1,89 @@
+{% extends 'reviewapp/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<!--CSS-->
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'reviewapp/style/addreview.css' %}">
+
+<div id="outer"
+    style="width:100%; background:url('/static/reviewapp/images/{{ restaurant.pk }}.jpg') no-repeat fixed center; background-size: cover;">
+    <div id="wrapper">
+
+        <!-- Back button-->
+        <a href="{% url 'reviewapp:details' restaurant.pk %}" class="back-button">
+            <i class="fas fa-arrow-circle-left"></i>
+        </a>
+
+        <!--Contents-->
+        <div>
+            <h1>{{restaurant.restaurant_text}}</h1>
+            <br>
+        </div>
+        <br>
+
+        <h5>Your first hand experiences would really help other foodies. Thank you!</h5>
+        <hr>
+
+        <form action="{% url 'reviewapp:reviewed' restaurant.pk %}" method="post">
+            {% csrf_token %}
+
+            <div>
+                <h6>Your overall rating of the restaurant</h6>
+                <label class="rate">
+                    <input type="radio" name="rate" value="1" checked>
+                    <i class=" fas fa-star text-warning" /></i>
+                </label>
+                <label class="rate">
+                    <input type="radio" name="rate" value="2">
+                    <i class=" fas fa-star text-warning" /></i>
+                </label>
+                <label class="rate">
+                    <input type="radio" name="rate" value="3">
+                    <i class=" fas fa-star text-warning" /></i>
+                </label>
+                <label class="rate">
+                    <input type="radio" name="rate" value="4">
+                    <i class=" fas fa-star text-warning" /></i>
+                </label>
+                <label class="rate">
+                    <input type="radio" name="rate" value="5">
+                    <i class=" fas fa-star text-warning" /></i>
+                </label>
+            </div>
+            <br>
+
+            <div>
+                <h6>How expensive is this restaurant?</h6>
+                <label>
+                    <input type="radio" name="price" value="1" checked>
+                    <div class="price"><i class="fas fa-dollar-sign"></i></div>
+                </label>
+                <label>
+                    <input type="radio" name="price" value="2">
+                    <div class="price"><i class="fas fa-dollar-sign"></i><i class="fas fa-dollar-sign"></i></div>
+                </label>
+                <label>
+                    <input type="radio" name="price" value="3">
+                    <div class="price"><i class="fas fa-dollar-sign"></i><i class="fas fa-dollar-sign"></i><i class="fas fa-dollar-sign"></i></div>
+                </label>
+                <br><br>
+            </div>
+
+            <div class="fieldWrapper">
+                <h6>Title of your review</h6>
+                {% render_field form.review_title class="form-control" placeholder="Summarize your visit or highlight an interesting detail" %}
+            </div><br>
+            <div class="fieldWrapper">
+                <h6>Your review</h6>
+                {% render_field form.review_description class="form-control" placeholder="Tell people about the food, atmosphere, service, etc." %}
+            </div><br>
+
+            <input type="submit" value="Submit your review" class="btn btn-success"
+                style="font-weight: 500; margin-bottom: 50px">
+            <br>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

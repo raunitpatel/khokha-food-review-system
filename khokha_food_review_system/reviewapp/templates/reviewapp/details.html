@@ -1,0 +1,198 @@
+{% extends 'reviewapp/base.html' %}
+
+{% block content %}
+
+<div id="outer"
+style="width:100%; min-height: 100vh; background:url('/static/reviewapp/images/{{ restaurant.pk }}.jpg') no-repeat fixed center; background-size: cover;">
+
+    <div class="content-container container">
+        
+        <!--RESTAURANT SUMMARY-->
+        <div class="row">
+            <div id="restaurant-summary" class="col card border-0 shadow mb-4">
+                <div class="card-body">
+                    
+                    <!-- Back button -->
+                    <a href="{% url 'reviewapp:home'%}" class="back-button">
+                        <i class="fas fa-arrow-circle-left"></i>
+                    </a>
+
+                    <!-- Title -->
+                    <h1>{{restaurant.restaurant_text}}</h1>
+
+                    <!-- Location -->
+                    <label class="review-liner">
+                        <span style="font-size: 1.5em;">
+                            <i class="fas fa-map-marker-alt" style="color:cornflowerblue;" ></i>
+                        </span>
+                        <strong>{{ restaurant.restaurant_address }}</strong>
+                    </label>
+
+                    <!-- Category -->
+                    <label class="review-liner">
+                        <p><span class="badge badge-pill badge-primary category"><strong>{{ restaurant.category.category_text }}</strong></span></p>
+                    </label>
+                    
+                    <!-- Average rating -->
+                    <label class="review-liner">
+                        <div class="rate">
+                            {% for i in restaurant.rating|rjust:restaurant.rating %}
+                            <i class="fas fa-star"/></i>
+                            {% endfor %}
+                        </div>
+                    </label>
+
+                    <!-- Average price -->
+                    <label class="review-liner">
+                        <div class="price">
+                            {% for i in restaurant.pricing|rjust:restaurant.pricing %}
+                            <i class="fas fa-dollar-sign"></i>
+                            {% endfor %}
+                        </div>
+                    </label>
+                    
+                    <!-- Reviews count -->
+                    <label class="review-liner">    
+                        <strong>({{ restaurant.review_set.count }} reviews)</strong>
+                    </label>
+                </div>
+            </div>        
+        </div>
+        
+        <!--ADD REVIEW-->
+        <a href="{% url 'reviewapp:add' restaurant.id %}" id="add-review" class="btn btn-lg btn-block">
+            <strong>Add a Review!</strong>
+        </a>
+
+        <!--ALL REVIEWS-->
+        
+        {% if restaurant.review_set.all %}
+            {% for review in restaurant.review_set.all|dictsortreversed:"pk" %}
+                <div class="row">
+                    <div class="col card" style="margin: 10px">
+                        <div class="card-body">
+                            <div class="user-bar">
+                                <span class="user-icon"><i class="fas fa-user-circle"></i></span>
+                                <div class="user-icon-side review-meta-data">
+                                    <span><strong>{{review.review_user}}</strong></span><br>
+                                    <span class="date">Reviewed on {{ review.review_date }}</span>
+                                </div>
+                            </div>
+                            
+
+                            <label class="review-liner-small review-icon">
+                                {% for i in review.review_rate|rjust:review.review_rate %}
+                                <i class="fas fa-star rate-small"/></i>
+                                {% endfor %}
+                            </label>
+                            <label id="price" class="review-liner-small review-icon">
+                                {% for i in review.review_price|rjust:review.review_price %}
+                                <i class="fas fa-dollar-sign price-small"/></i>
+                                {% endfor %}
+                            </label>
+                            
+                            <h3>{{ review.review_title }}</h3>
+                            {{review.review_description}}
+                            
+                            <!--Likes-->
+                            <div id="rl{{ review.id }}" class="row">
+                                <div class="col-1">
+                                    {% if review.id in user_liked_reviews %}
+                                        <span class="badge badge-primary">Liked! </span>
+                                    {% else %}
+                                    <form action="#" method="post" onsubmit="addLike(this); return false;">
+                                        {% csrf_token %}
+                                        <input type="submit" value="Like" class="btn btn-outline-primary btn-sm" style="height:20px;line-height: 0px;"></input>
+                                        <input type="hidden" name="review_id" value="{{ review.id }}" />
+                                    </form>
+                                    {% endif %}
+                                </div>
+                                <div class="col-1">
+                                    <span class="badge badge-danger">
+                                        <span class="likes-count" style="padding-right:10px;">{{review.like_set.count}}</span>
+                                        <i class="fas fa-thumbs-up"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <!-- COMMENTS -->
+                            <div>
+                                
+                                <!-- ADD COMMENT -->
+                                <div class="row row-comment-reply">
+                                    <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
+                                    <form action="#" method="post" class="col-11 comment_form" onsubmit="addComment(this); return false;">
+                                        {% csrf_token %}
+                                        <input type="text" class="form-control new-comment-reply" name="comment_description" placeholder="Write your comment for this review..."> 
+                                        <input type="hidden" name="review_id" value="{{ review.id }}" />
+                                    </form>
+                                </div>
+
+                                <!-- CURRENT COMMENTS -->
+                                <div id="rc{{ review.id }}">
+                                    {% for comment in review.comment_set.all|dictsortreversed:"pk" %}
+                                        <div>
+                                            <div class="row row-comment-reply">
+                                                <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
+                                                <div class="col-11">
+                                                    <div class="comment-reply-content">
+                                                        <span class="comment-reply-username">{{comment.comment_user}}</span>
+                                                        <span class="comment-reply-description">{{comment.comment_description}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- OPTIONS -->
+                                            <div id="cc{{ comment.id }}" class="replies-with-comment-options">
+                                                <div class="comment-options">
+                                                    <a href="#" onclick="createAddReply({{ comment.id }}, this); return false;">Reply</a>
+                                                </div>
+                                            </div>
+
+                                            <!-- CURRENT REPLIES -->
+                                            <div id="c{{ comment.id }}" class="replies">
+                                                {% for reply in comment.reply_set.all|dictsortreversed:"pk" %}
+                                                    <div class="row row-comment-reply">
+                                                        <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
+                                                        <div class="col-11">
+                                                            <div class="comment-reply-content">
+                                                                <span class="comment-reply-username">{{reply.reply_user}}</span>
+                                                                <span class="comment-reply-description">{{reply.reply_description}}</span>
+                                                            </div>  
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <div id="no-reviews-yet-message" class="alert alert-success" role="alert">
+                <p>There are no reviews for {{ restaurant.restaurant_text }} yet.</p>
+                <p>Would you like to start writing a review?</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!--SAMPLE COMMENT REPLY LIKE-->
+{% include 'reviewapp/components_restaurant_details.html' %}
+
+<!--CSS & JS-->
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'reviewapp/style/restaurantdetails.css' %}" />
+{% load static %}
+<script src="{% static "reviewapp/js/restaurant.comment.reply.like.js" %}"></script>
+
+<script>
+    var user_id = "{{ user.id }}";
+    var user_username = "{{ user.username }}";
+</script>
+{% endblock %}

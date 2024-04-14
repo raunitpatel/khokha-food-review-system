@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Foodie Reviews</title>
+
+    <!--CSS-->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'reviewapp/style/style.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!--Font-->
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <!--Font Awesome Icons-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+</head>
+
+<body>
+    <!-- JavaScript -->
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    {% load widget_tweaks %}
+
+    <main>
+        <nav class="navbar-foodie navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" href="/reviewapp/">
+                <img src="/static/reviewapp/images/frlogo3.png" height="40px" alt="foodie reviews">
+            </a>
+
+            <ul class="nav navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="{% url 'reviewapp:home' %}">Home</a></li>
+            </ul>
+
+            {% if user.is_authenticated %}
+            <span class="navbar-text" style="margin-right:20px">Hello, {{user.username}}!</span>
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="btn btn-info my-2 my-sm-0 login" style="font-weight: 500" type="submit">Log
+                    out</button>
+            </form>  
+            {% else %}
+            <a href="/accounts/login"><button class="btn btn-outline-info my-2 my-sm-0 login">Login</button>
+            </a>
+            {% endif %}
+        </nav>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <style>
+    .navbar{
+        padding: 20px 100px;
+        font-size: 1.3em;
+        font-weight: bold;
+        color:#333;
+        background-color:white;
+    }
+    .nav-item{
+        padding: 3px 40px;
+    }
+    </style>
+</body>
+
+</html>
