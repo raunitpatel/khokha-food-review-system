@@ -1,4 +1,4 @@
-djangorestframework
-markdown
-django-filter
-django-widget-tweaks
+Django==5.0.3
+django_microsoft_authentication==0.1.6
+djangorestframework==3.15.1
+python-dotenv==1.0.1

@@ -46,13 +46,13 @@
             </ul>
             <span class="navbar-text" style="margin-right:20px">Hello, {{user.username}}!</span>
 
-            <form method="post" action="{% url 'logout' %}">
+            <form method="post" action="{% url 'microsoft_authentication:microsoft_authentication_logout' %}">
                 {% csrf_token %}
                 <button class="btn btn-info my-2 my-sm-0 login" style="font-weight: 500" type="submit">Log
                     out</button>
             </form>  
             {% else %}
-            <a href="/accounts/login"><button class="btn btn-outline-info my-2 my-sm-0 login">Login</button>
+            <a href="{% url 'microsoft_authentication:microsoft_authentication_login' %}"><button class="btn btn-outline-info my-2 my-sm-0 login">Login</button>
             </a>
             {% endif %}
         </nav>

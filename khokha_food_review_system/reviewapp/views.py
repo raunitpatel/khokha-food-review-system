@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.http import HttpResponse
+from microsoft_authentication.auth.auth_decorators import microsoft_login_required
 
 
 def home(request):
@@ -47,7 +49,7 @@ def get_liked_reviews_by_user_and_restaurant(user, restaurant):
     return liked_reviews
 
 
-@login_required
+@microsoft_login_required()
 def add(request, restaurant_id):
     form = ReviewForm()
     restaurant = get_object_or_404(Restaurant, pk=restaurant_id)
@@ -58,7 +60,7 @@ def add(request, restaurant_id):
     return render(request, 'reviewapp/add.html', context)
     
 
-@login_required
+@microsoft_login_required()
 def reply(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     if comment:
@@ -83,7 +85,7 @@ def reply(request, comment_id):
 
 #     return render(request, 'reviewapp/details.html', {'restaurant': res, 'user': request.user})
 
-@login_required
+@microsoft_login_required()
 def reviewed(request, restaurant_id):
     res = get_object_or_404(Restaurant, pk=restaurant_id)
     if request.method == 'POST':

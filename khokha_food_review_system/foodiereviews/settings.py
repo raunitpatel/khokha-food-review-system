@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # LOGIN_URL = '/reviewapp'
 LOGIN_REDIRECT_URL = '/reviewapp'
@@ -44,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'widget_tweaks',
+    'microsoft_authentication',
 ]
 
 REST_FRAMEWORK = {
@@ -136,3 +139,34 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+
+# Microsoft Authentication
+
+APP_ID=os.getenv('APP_ID')
+APP_SECRET=os.getenv('APP_SECRET')
+TENANT_ID=os.getenv('TENANT_ID')
+
+
+
+MICROSOFT = {
+    "app_id": APP_ID,
+    "app_secret": APP_SECRET,
+    "redirect": "http://localhost:8000/microsoft_authentication/callback",
+    "scopes": ["user.read"],
+    "authority": "https://login.microsoftonline.com/"+TENANT_ID,
+    "valid_email_domains": ["iitg.ac.in"],
+    "logout_uri": "http://localhost:8000/reviewapp"
+}
+
+
+LOGIN_URL = "/microsoft_authentication/login"
+LOGIN_REDIRECT_URL = "/reviewapp"
+
+
+# True: creates new Django User after valid microsoft authentication. 
+# False: it will only allow those users which are already created in Django User model and 
+# will validate the email using Microsoft.
+MICROSOFT_CREATE_NEW_DJANGO_USER = True  # Optional, default value is True
+MICROSOFT_NEW_DJANGO_USER_IS_STAFF = False  # Optional, default value is True

@@ -22,5 +22,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('reviewapp/', include('reviewapp.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
+    # path('accounts/', include('django.contrib.auth.urls')),
+    path('microsoft_authentication/', include('microsoft_authentication.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
