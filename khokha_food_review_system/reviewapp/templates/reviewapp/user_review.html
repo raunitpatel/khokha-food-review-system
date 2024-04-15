@@ -10,18 +10,40 @@
                 <th>Review Description</th>
                 <th>Review Rate</th>
                 <th>Review Price</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             {% for review in reviews %}
-                <tr>
+                <tr  id="review-{{ review.review_id }}">
                     <td>{{ review.restaurant_name }}</td>
                     <td>{{ review.review_title }}</td>
                     <td>{{ review.review_description }}</td>
-                    <td>{{ review.review_rate }}</td>
-                    <td>{{ review.review_price }}</td>
+                    <td><span class="rating">{{ review.review_rate }}</span></td>
+                    <td><span class="price">{{ review.review_price }}</span></td>
+                    <td>
+                        <button class="delete-review-btn" onclick="deletereview( {{ review.review_id }} ,{{ review.review_user_id }})" i>Delete</button>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'reviewapp/style/user_review.css' %}" />
+    {% load static %}
+    <script src="{% static "reviewapp/js/user_review.js" %}"></script>
+
+    <script>
+        // Call the JavaScript functions to add icons for review rate and review price
+        $(document).ready(function() {
+            $('.rating').each(function() {
+                createStarRatings($(this), $(this).text());
+            });
+
+            $('.price').each(function() {
+                createPriceRatings($(this), $(this).text());
+            });
+        });
+    </script>
 {% endblock %}

@@ -1,6 +1,6 @@
 from .models import *
 from .forms import *
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404,redirect
 from django.urls import reverse
 from django.views import generic
 from django.contrib.auth.decorators import login_required
@@ -69,18 +69,41 @@ def reply(request, comment_id):
     return render(request, 'reviewapp/details.html', {'restaurant': comment.review.restaurant, 'user': request.user})
 
 
+# @login_required
+# def reviewed(request, restaurant_id):
+#     form = ReviewForm(request.POST)
+#     # print(form)
+#     if form.is_valid():
+#         rtg = request.POST.get("rate", 1)
+#         p = request.POST.get("price", 1)
+#         res = get_object_or_404(Restaurant, pk=restaurant_id)
+#         res.review_set.create(review_user=request.user, **form.cleaned_data, review_rate=rtg, review_price=p)
+#     else:
+#         print(form.errors)
+
+#     return render(request, 'reviewapp/details.html', {'restaurant': res, 'user': request.user})
+
 @login_required
 def reviewed(request, restaurant_id):
-    form = ReviewForm(request.POST)
-    if form.is_valid():
-        rtg = request.POST.get("rate", 1)
-        p = request.POST.get("price", 1)
-        res = get_object_or_404(Restaurant, pk=restaurant_id)
-        res.review_set.create(review_user=request.user, **form.cleaned_data, review_rate=rtg, review_price=p)
+    res = get_object_or_404(Restaurant, pk=restaurant_id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, request.FILES)  # Include request.FILES for file uploads
+        if form.is_valid():
+            rtg = request.POST.get("rate", 1)
+            p = request.POST.get("price", 1)
+            review_instance = form.save(commit=False)
+            review_instance.review_user = request.user
+            review_instance.review_rate = rtg
+            review_instance.review_price = p
+            review_instance.restaurant = res
+            review_instance.save()
+            return redirect('reviewapp:details', restaurant_id=restaurant_id)
+        else:
+            print(form.errors)
     else:
-        print(form.errors)
+        form = ReviewForm()
+    return render(request, 'reviewapp/details.html', {'restaurant': res, 'user': request.user, 'form': form})
 
-    return render(request, 'reviewapp/details.html', {'restaurant': res, 'user': request.user})
 
 
 def comment_add(request, review_id):
@@ -328,3 +351,30 @@ class GetCategoryImage(APIView):
 #             'restaurants': restaurants
 #         }
 #         return Response(data)
+
+class ReviewDeleteView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def post(self, request, format=None):
+        success = False
+        total_reviews = 0
+
+        try:
+            review_id = request.data.get('reviewId', None)
+            user_id = request.data.get('userId', None)
+            print(review_id, user_id)
+            if review_id and user_id:
+                review = Review.objects.filter(pk=review_id, review_user_id=user_id).first()
+                if review:
+                    review.delete()
+                    success = True
+                    total_reviews = Review.objects.filter(review_user_id=user_id).count()
+        except Exception as e:
+            print(e, "Invalid fields for delete. Required: review id, user_id.")
+
+        data = {
+            'success': success,
+            'total_reviews': total_reviews
+        }
+        return Response(data)

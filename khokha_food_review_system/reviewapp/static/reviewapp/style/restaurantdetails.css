@@ -148,3 +148,10 @@ hr {
     font-size: 1em;
     padding: 10px 25px;
 }
+.img-fluid{
+    height: 200px;
+    width: 400px;
+    object-fit: cover;
+    border-radius: 20px;
+
+}

@@ -7,6 +7,7 @@ class ReviewForm(ModelForm):
         fields = [
             'review_title',
             'review_description',
+            'review_images',
         ]
         widgets = {
             'review_description': Textarea(attrs={'cols': 80, 'rows': 8}),

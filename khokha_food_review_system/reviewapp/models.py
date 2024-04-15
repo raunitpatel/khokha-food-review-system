@@ -58,6 +58,7 @@ class Review(models.Model):
     review_rate = models.IntegerField(default = 0)
     review_price = models.IntegerField(default = 0)
     review_date = models.DateTimeField(auto_now_add=True)
+    review_images = models.ImageField(upload_to='review_images/',null=True, blank=True)
 
     def __str__(self):
         return self.review_description
@@ -76,6 +77,8 @@ class Review(models.Model):
                 'review_description': review.review_description,
                 'review_rate': review.review_rate,
                 'review_price': review.review_price,
+                'review_user_id': review.review_user.pk,
+                'review_id': review.pk
             }
             reviews_details.append(review_details)
         

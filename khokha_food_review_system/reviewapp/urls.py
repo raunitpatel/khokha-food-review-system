@@ -34,5 +34,9 @@ urlpatterns = [
 
     # ex: /reviewapp/api/category_image
     path('api/category_image/', views.GetCategoryImage.as_view(), name="category_image"),
+
+    # ex: /reviewapp/review/delete/
+     path('review/delete/', views.ReviewDeleteView.as_view(), name='review_delete'),
+
     
 ]

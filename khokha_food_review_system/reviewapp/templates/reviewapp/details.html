@@ -93,7 +93,11 @@ style="width:100%; min-height: 100vh; background:url('/static/reviewapp/images/{
                             
                             <h3>{{ review.review_title }}</h3>
                             {{review.review_description}}
-                            
+                            <hr>
+                            {% comment %} add the uploaded image {% endcomment %}
+                            {% if review.review_images %}
+                                <img src="{{ review.review_images.url }}" class="img-fluid" alt="Responsive image">
+                            {% endif %}                            
                             <!--Likes-->
                             <div id="rl{{ review.id }}" class="row">
                                 <div class="col-1">

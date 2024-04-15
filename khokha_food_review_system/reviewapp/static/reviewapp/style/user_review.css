@@ -1,0 +1,44 @@
+/* CSS for Review List Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th, tbody td {
+    padding: 8px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+thead th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tbody tr:hover {
+    background-color: #e6e6e6;
+}
+.rating i {
+    color: orange;
+}
+.price i {
+    color: #4CAF50;
+}
+
+.delete-review-btn{
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+}
