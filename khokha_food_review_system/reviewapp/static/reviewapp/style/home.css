@@ -11,6 +11,8 @@
     background-size: cover;
     transition: background 0.4s ease;
     font-family: "Poppins", sans-serif !important;
+    display: flex;
+    justify-content: space-between;
 }
 
 .select-wrapper {
@@ -18,7 +20,7 @@
     
 }
 
-#category-dropdown{
+#category-dropdown,#filter-dropdown{
     font-size: 30px;
     border-radius: 50px;
     padding: 15px 70px 15px 40px;
@@ -32,7 +34,6 @@
         appearance: none;
     
 }
-
 .select-wrapper span {
   	content: '\f107';
     font-size: 28px;

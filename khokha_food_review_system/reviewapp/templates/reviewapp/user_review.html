@@ -1,0 +1,27 @@
+{% extends 'reviewapp/base.html' %}
+
+{% block content %}
+    <h1>Review List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Restaurant Name</th>
+                <th>Review Title</th>
+                <th>Review Description</th>
+                <th>Review Rate</th>
+                <th>Review Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for review in reviews %}
+                <tr>
+                    <td>{{ review.restaurant_name }}</td>
+                    <td>{{ review.review_title }}</td>
+                    <td>{{ review.review_description }}</td>
+                    <td>{{ review.review_rate }}</td>
+                    <td>{{ review.review_price }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

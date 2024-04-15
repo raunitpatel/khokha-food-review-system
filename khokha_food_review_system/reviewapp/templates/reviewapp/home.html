@@ -2,9 +2,21 @@
 
 {% block content %}
 
-<div id="category-banner" class="text-center">
+
+
+<div id="category-banner">
     <div class="select-wrapper">
-        <select id="category-dropdown" onchange="getRestaurants(this.value);">
+        <select id="filter-dropdown" onchange="getRestaurants($('#category-dropdown').val(), this.value);">
+            <option selected value="0">All Restaurants</option>
+            <option value="1">Top Rated</option>
+            <option value="2">Most Reviewed</option>
+            <option value="3">Price: Low to High</option>
+            <option value="4">Price: High to Low</option>
+        </select>
+        <span><i class="fas fa-chevron-circle-down"></i></span>
+    </div>
+    <div class="select-wrapper">
+        <select id="category-dropdown" onchange="getRestaurants(this.value, $('#filter-dropdown').val());">
             <option selected value="0">All Cuisines</option>
             {% for c in categories %}
             <option value="{{ c.id }}">{{ c.category_text }}</option>
@@ -34,10 +46,13 @@
             <img class="card-img-top" src="/static/reviewapp/images/1.jpg" width="100%">
         </div>
         <div class="card-body">
-            <h4 class="card-title"><span class="restaurant-text"></span></h4>
+            
+           <span class="restaurant-text"></span><br>
+            <span class="category"></span><br>
             <span class="rating"></span>
             <span class="pricing"></span>
             (<span class="reviews"></span> reviews)
+            
         </div>
     </a>
 </div>

@@ -14,6 +14,17 @@ def home(request):
     return render(request, 'reviewapp/home.html', context={'categories': categories})
 
 
+def user_review(request):
+    user = request.user
+    
+    # Retrieve reviews associated with the current user
+    reviews_details = Review().get_review_by_user(user)
+
+    print(reviews_details)
+
+    return render(request, 'reviewapp/user_review.html', context={'reviews': reviews_details})
+
+
 def details(request, restaurant_id):
     restaurant = Restaurant.objects.filter(pk=restaurant_id).first()
     user_liked_reviews = []
@@ -190,7 +201,8 @@ class GetRestaurantsByCategory(APIView):
 
         try:
             category_id = request.GET.get('category_id', None)
-        
+            filter_id = request.GET.get('filter_id', None)
+            print(filter_id, category_id)
             if category_id:
                 # 0 = All categories
                 if category_id == "0":
@@ -201,13 +213,29 @@ class GetRestaurantsByCategory(APIView):
 
                 for r in restaurants:
                     restaurant = Restaurant.objects.filter(pk=r['id']).first()
+                    
                     r['review_amount'] = restaurant.review_amount()
                     r['rating'] = restaurant.rating()
                     r['pricing'] = restaurant.pricing()
                     r['category'] = restaurant.category.category_text
-                
-                restaurants.sort(key=lambda x: int(x['rating']), reverse=False)
+                    r['image'] = restaurant.restaurant_img.url
 
+                if filter_id == "0":
+                    # just return the list of restaurants
+                    pass
+
+                elif filter_id == "1":
+                    # Sort by rating
+                    restaurants.sort(key=lambda x: int(x['rating']), reverse=False)
+                elif filter_id == "2":
+                    # Sort by review amount
+                    restaurants.sort(key=lambda x: int(x['review_amount']), reverse=False)
+                elif filter_id == "3":
+                    # Sort by price
+                    restaurants.sort(key=lambda x: int(x['pricing']), reverse=True)
+                elif filter_id == "4":
+                    # Default sort by rating
+                    restaurants.sort(key=lambda x: int(x['pricing']), reverse=False)
         except Exception as e:
             print(e, "Invalid category id.")
 
@@ -215,3 +243,88 @@ class GetRestaurantsByCategory(APIView):
             'restaurants': restaurants
         }
         return Response(data)
+
+class GetCategoryImage(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, format=None):
+
+        categories = None
+        #add image for 0 category
+        
+
+        try:
+            categories = list(Category.objects.all().values())
+            default_category = {
+                'id': 0,
+                'category_text': 'All Categories',  # You can customize the text as needed
+                'category_img': 'category_images/default.jpg',  # Provide a default image URL
+                'image': '/static/category_images/default.jpg'  # Static file URL for the default image
+            }
+            categories.insert(0, default_category)
+            for c in categories[1:]:
+                category = Category.objects.filter(pk=c['id']).first()
+                c['image'] = category.category_img.url
+
+        except Exception as e:
+            print(e, "Invalid category id.")
+
+        data = {
+            'categories': categories
+        }
+        return Response(data)
+
+
+# class GetRestaurantsByCategory(APIView):
+#     authentication_classes = []
+#     permission_classes = []
+
+#     def get(self, request, format=None):
+#         restaurants = None
+
+#         try:
+#             category_id = request.GET.get('category_id', None)
+#             filter_id = request.GET.get('filter_id', None)
+        
+#             if category_id and filter_id:
+#                 if category_id == "0":  # All categories
+#                     if filter_id == "0":  # All restaurants
+#                         restaurants = list(Restaurant.objects.all().values())
+#                     elif filter_id == "1":  # Top rated
+#                         restaurants = list(Restaurant.objects.all().order_by('rating').values())
+#                     elif filter_id == "2":  # Most reviewed
+#                         restaurants = list(Restaurant.objects.all().order_by('review_amount').values())
+#                     elif filter_id == "3":  # Price: Low to High
+#                         restaurants = list(Restaurant.objects.all().order_by('pricing').values())
+#                     elif filter_id == "4":  # Price: High to Low
+#                         restaurants = list(Restaurant.objects.all().order_by('-pricing').values())
+#                 else:
+#                     category = get_object_or_404(Category, pk=category_id)
+#                     if filter_id == "0":  # All restaurants in the selected category
+#                         restaurants = list(category.restaurant_set.all().values())
+#                     elif filter_id == "1":  # Top rated in the selected category
+#                         restaurants = list(category.restaurant_set.all().order_by('rating').values())
+#                     elif filter_id == "2":  # Most reviewed in the selected category
+#                         restaurants = list(category.restaurant_set.all().order_by('review_amount').values())
+#                     elif filter_id == "3":  # Price: Low to High in the selected category
+#                         restaurants = list(category.restaurant_set.all().order_by('pricing').values())
+#                     elif filter_id == "4":  # Price: High to Low in the selected category
+#                         restaurants = list(category.restaurant_set.all().order_by('-pricing').values())
+
+#                 for r in restaurants:
+#                     restaurant = Restaurant.objects.filter(pk=r['id']).first()
+                    
+#                     r['review_amount'] = restaurant.review_amount()
+#                     r['rating'] = restaurant.rating()
+#                     r['pricing'] = restaurant.pricing()
+#                     r['category'] = restaurant.category.category_text
+#                     r['image'] = restaurant.restaurant_img.url
+
+#         except Exception as e:
+#             print(e, "Invalid category id.")
+
+#         data = {
+#             'restaurants': restaurants
+#         }
+#         return Response(data)

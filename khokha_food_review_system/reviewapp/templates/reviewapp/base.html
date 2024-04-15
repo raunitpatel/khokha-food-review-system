@@ -41,6 +41,9 @@
             </ul>
 
             {% if user.is_authenticated %}
+            <ul class="nav navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="{% url 'reviewapp:user_review' %}">View your Reviews</a></li>
+            </ul>
             <span class="navbar-text" style="margin-right:20px">Hello, {{user.username}}!</span>
 
             <form method="post" action="{% url 'logout' %}">

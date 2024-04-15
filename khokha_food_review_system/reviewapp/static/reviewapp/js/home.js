@@ -1,4 +1,4 @@
-function getRestaurants(categoryId){
+function getRestaurants(categoryId,filterId){
     var endpoint = "/reviewapp/api/restaurants/list/";
 
     $.ajax({
@@ -6,21 +6,49 @@ function getRestaurants(categoryId){
         url: endpoint,
         data: {
             category_id: categoryId,
+            filter_id: filterId
+            
         },
+        
         success: function(data) {
             if (data.restaurants){
                 changeCategoryBackground(categoryId);
-                displayRestaurants(data.restaurants);
+                displayRestaurantsaccordingtoselectedfilter(data.restaurants);
             }
         }
     });
 }
+
+
+
+
+
+
 function changeCategoryBackground(categoryId){
-    imageURL = "url('/static/reviewapp/images/cat"+categoryId+".jpg')";
-    $('#category-banner').css("background-image", imageURL); 
+    var endpoint = "/reviewapp/api/category_image/";
+    
+    $.ajax({
+        method: "GET",
+        url: endpoint,
+        data: {
+            category_id: categoryId,
+        },
+        success: function(data) {
+            console.log(data.categories[categoryId]);
+            if (data.categories[categoryId].image){
+                var imageURL = "url('" + data.categories[categoryId].image + "')";
+                $('#category-banner').css("background-image", imageURL); 
+            } else {
+                console.error("No image URL found for category ID:", categoryId);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching category image URL:", error);
+        }
+    });
 }
 
-function displayRestaurants(restaurants){
+function displayRestaurantsaccordingtoselectedfilter(restaurants){
     console.log(restaurants);
     var restaurantsDiv = $("#restaurants-list");
     restaurantsDiv.empty();
@@ -40,8 +68,9 @@ function displayRestaurants(restaurants){
         newRestaurant.find("span.category").text(restaurant.category);
         createStarRatings(newRestaurant.find("span.rating"), restaurant.rating);
         createPriceRatings(newRestaurant.find("span.pricing"), restaurant.pricing);
-        var imgsrc = "/static/reviewapp/images/" + restaurant.id + ".jpg";
-        newRestaurant.find("img").attr("src", imgsrc);
+        
+        newRestaurant.find("img").attr("src", restaurant.image);
+       
         var ahref = "/reviewapp/resto/" + restaurant.id + "/";
         newRestaurant.find("a").attr("href", ahref);
         newRestaurant.show();
@@ -58,3 +87,4 @@ function createPriceRatings(priceSpan , number){
         priceSpan.append('<i class="fas fa-dollar-sign"></i>');
     }
 }
+
