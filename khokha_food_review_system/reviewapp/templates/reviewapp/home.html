@@ -7,7 +7,7 @@
 <div id="category-banner">
     <div class="select-wrapper">
         <select id="filter-dropdown" onchange="getRestaurants($('#category-dropdown').val(), this.value);">
-            <option selected value="0">All Restaurants</option>
+            <option selected value="0">All Dishes</option>
             <option value="1">Top Rated</option>
             <option value="2">Most Reviewed</option>
             <option value="3">Price: Low to High</option>
@@ -17,7 +17,7 @@
     </div>
     <div class="select-wrapper">
         <select id="category-dropdown" onchange="getRestaurants(this.value, $('#filter-dropdown').val());">
-            <option selected value="0">All Cuisines</option>
+            <option selected value="0">All restaurants</option>
             {% for c in categories %}
             <option value="{{ c.id }}">{{ c.category_text }}</option>
             {% endfor %}
@@ -29,7 +29,7 @@
 <!--ERROR-->
 <div id="none-found">
     <div class="alert alert-primary" role="alert">
-        No restaurants found.
+        No Dishes found.
     </div>
 </div>
 
@@ -47,11 +47,11 @@
         </div>
         <div class="card-body">
             
-           <span class="restaurant-text"></span><br>
-            <span class="category"></span><br>
+           <b><h4><span class="restaurant-text"></span></h4></b>
+           <h6><span class="category"></span><br></h6>
             <span class="rating"></span>
             <span class="pricing"></span>
-            (<span class="reviews"></span> reviews)
+             | <span class="reviews"></span> review(s) |
             
         </div>
     </a>

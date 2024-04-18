@@ -7,16 +7,19 @@
     text-align: center;
 }
 
+
+
 .price-small{
     color: #4CAF50;
 }
 
 .rate {
-    background-color: orange;
-    color:white;
-    border-radius: 50px;
+    background-color: yellow;
+    color:orange;
+    border-radius: 35px;
     padding: 6px 18px;
     text-align: center;
+    border: 2px solid black;
 }
 
 .rate-small{
@@ -25,7 +28,7 @@
 
 .review-liner{
     margin: 15px 20px 0px 0px;
-    font-size: 18px;
+    font-size: 30px;
 }
 
 .review-liner-small{

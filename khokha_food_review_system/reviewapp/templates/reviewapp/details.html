@@ -2,8 +2,8 @@
 
 {% block content %}
 
-<div id="outer"
-style="width:100%; min-height: 100vh; background:url('/static/reviewapp/images/{{ restaurant.pk }}.jpg') no-repeat fixed center; background-size: cover;">
+<div id="outer"  onchange="getRestaurants({{restaurant.pk}});"
+style="width:100%; min-height: 100vh; background: no-repeat fixed center; background-size: cover;">
 
     <div class="content-container container">
         
@@ -18,7 +18,8 @@ style="width:100%; min-height: 100vh; background:url('/static/reviewapp/images/{
                     </a>
 
                     <!-- Title -->
-                    <h1>{{restaurant.restaurant_text}}</h1>
+                    <h1><b>--- {{restaurant.restaurant_text}} ---</b></h1>
+                    
 
                     <!-- Location -->
                     <label class="review-liner">
@@ -46,14 +47,14 @@ style="width:100%; min-height: 100vh; background:url('/static/reviewapp/images/{
                     <label class="review-liner">
                         <div class="price">
                             {% for i in restaurant.pricing|rjust:restaurant.pricing %}
-                            <i class="fas fa-dollar-sign"></i>
+                            <i class="fas fa-rupee-sign"></i>
                             {% endfor %}
                         </div>
                     </label>
                     
                     <!-- Reviews count -->
                     <label class="review-liner">    
-                        <strong>({{ restaurant.review_set.count }} reviews)</strong>
+                        <strong>| {{ restaurant.review_set.count }} review(s) | </strong>
                     </label>
                 </div>
             </div>        
@@ -87,7 +88,7 @@ style="width:100%; min-height: 100vh; background:url('/static/reviewapp/images/{
                             </label>
                             <label id="price" class="review-liner-small review-icon">
                                 {% for i in review.review_price|rjust:review.review_price %}
-                                <i class="fas fa-dollar-sign price-small"/></i>
+                                <i class="fas fa-rupee-sign price-small"/></i>
                                 {% endfor %}
                             </label>
                             
@@ -128,7 +129,7 @@ style="width:100%; min-height: 100vh; background:url('/static/reviewapp/images/{
                                     <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
                                     <form action="#" method="post" class="col-11 comment_form" onsubmit="addComment(this); return false;">
                                         {% csrf_token %}
-                                        <input type="text" class="form-control new-comment-reply" name="comment_description" placeholder="Write your comment for this review..."> 
+                                        <input type="text" class="form-control new-comment-reply" name="comment_description" placeholder="Reply to this review..."> 
                                         <input type="hidden" name="review_id" value="{{ review.id }}" />
                                     </form>
                                 </div>
@@ -198,5 +199,43 @@ style="width:100%; min-height: 100vh; background:url('/static/reviewapp/images/{
 <script>
     var user_id = "{{ user.id }}";
     var user_username = "{{ user.username }}";
+    
+
+    $(document).ready(function() {
+        getRestaurantImage({{ restaurant.pk }});
+    });
+    function getRestaurantImage(restaurantId) {
+        var endpoint = "/reviewapp/api/restaurant_image/";
+    
+        $.ajax({
+            method: "GET",
+            url: endpoint,
+            data: {
+                restaurant_id: restaurantId,
+            },
+            success: function(data) {
+                console.log(data);
+                // Process the response data here
+                var size = Object.keys(data).length;
+                // Iterate through the categories object
+                for (var i = 0; i < size; i++) {
+                    // Check if the current category's ID matches the specified categoryId
+                    if (data[i].id == restaurantId) {
+                        console.log(data[i]);
+                        
+                        var imageURL = "url('/media/" + data[i].restaurant_img + "')";
+                        console.log(imageURL);
+                        $('#outer').css("background-image", imageURL); 
+                        console.log(imageURL);
+                        break; // Exit the loop once the category is found
+                    }
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching restaurant images:", error);
+            }
+        });
+    }
+
 </script>
 {% endblock %}

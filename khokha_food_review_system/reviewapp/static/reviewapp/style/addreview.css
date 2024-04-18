@@ -15,7 +15,7 @@
 }
 
 #outer {
-    background: url('images/2.jpg') no-repeat fixed center;
+    background: url('media/category_images/download.jpeg') no-repeat fixed center;
     background-size: auto;
     width:100%; 
     height:1000px; 
@@ -37,19 +37,19 @@
 }
 
 .rate :hover {
-    font-size: 32px;
+    font-size: 80px;
 }
 
 /* CHECKED STYLES */
 [type=radio]:checked+i {
-    font-size: 32px;
-    text-shadow: 1px 1px 1px black;
+    font-size: 50px;
+    text-shadow: 2px 2px 2px black;
 }
 
 [type=radio]:checked+div {
     background-color: #4CAF50;
     border: 2px solid #4CAF50;
-    color: white;
+    color: rgb(255, 255, 255);
 }
 
 .price {
@@ -71,3 +71,12 @@ h1 {
 #address{
     text-align: center;
 }
+
+#review-cont{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color:rgb(237, 230, 250);
+    border-radius: 10px;
+}
+

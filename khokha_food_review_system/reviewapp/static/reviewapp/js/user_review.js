@@ -30,6 +30,6 @@ function createStarRatings(ratingSpan , number){
 function createPriceRatings(priceSpan , number){
     priceSpan.empty();
     for (var i = 0; i < parseInt(number); i++) {
-        priceSpan.append('<i class="fas fa-dollar-sign"></i>');
+        priceSpan.append('<i class="fas fa-rupee-sign"></i>');
     }
 }

@@ -11,6 +11,7 @@ from django.http import HttpResponse
 from microsoft_authentication.auth.auth_decorators import microsoft_login_required
 
 
+
 def home(request):
     categories = Category.objects.all()
     return render(request, 'reviewapp/home.html', context={'categories': categories})
@@ -47,6 +48,7 @@ def get_liked_reviews_by_user_and_restaurant(user, restaurant):
         if like:
             liked_reviews.append(review.id)
     return liked_reviews
+
 
 
 @microsoft_login_required()
@@ -284,8 +286,8 @@ class GetCategoryImage(APIView):
             default_category = {
                 'id': 0,
                 'category_text': 'All Categories',  # You can customize the text as needed
-                'category_img': 'category_images/default.jpg',  # Provide a default image URL
-                'image': '/static/category_images/default.jpg'  # Static file URL for the default image
+                'category_img': '/media/category_images/food_bg2.jpg',  # Provide a default image URL
+                'image': '/media/category_images/food_bg2.jpg'  # Static file URL for the default image
             }
             categories.insert(0, default_category)
             for c in categories[1:]:
@@ -380,3 +382,25 @@ class ReviewDeleteView(APIView):
             'total_reviews': total_reviews
         }
         return Response(data)
+
+
+class GetRestaurantImage(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, format=None):
+
+        restaurants = None
+       
+        
+
+        try:
+            restaurants = list(Restaurant.objects.all().values())
+            print(restaurants)
+            
+
+        except Exception as e:
+            print(e, "Invalid category id.")
+
+        
+        return Response(restaurants)

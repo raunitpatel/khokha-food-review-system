@@ -40,7 +40,7 @@
     <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
     <form action="#" method="post" class="col-11" onsubmit="addReply(this); return false;">
         {% csrf_token %}
-        <input type="text" class="form-control new-comment-reply" name="reply_description" placeholder="Write your reply to this comment..."> 
+        <input type="text" class="form-control new-comment-reply" name="reply_description" placeholder="Reply to this comment..."> 
         <input type="hidden" name="comment_id" value="" />
     </form>
 </div>

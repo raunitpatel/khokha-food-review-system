@@ -154,7 +154,7 @@ MICROSOFT = {
     "app_id": APP_ID,
     "app_secret": APP_SECRET,
     "redirect": "http://localhost:8000/microsoft_authentication/callback",
-    "scopes": ["user.read"],
+    "scopes": ["user.read","email","user.readbasic.all"],
     "authority": "https://login.microsoftonline.com/"+TENANT_ID,
     "valid_email_domains": ["iitg.ac.in"],
     "logout_uri": "http://localhost:8000/reviewapp"

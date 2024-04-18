@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Foodie Reviews</title>
+    <title>Byte-Bite</title>
 
     <!--CSS-->
     {% load static %}
@@ -31,18 +31,18 @@
     {% load widget_tweaks %}
 
     <main>
-        <nav class="navbar-foodie navbar navbar-expand-lg navbar-light">
+        
+
+        <nav class="navbar-foodie navbar navbar-expand-lg">
             <a class="navbar-brand" href="/reviewapp/">
-                <img src="/static/reviewapp/images/frlogo3.png" height="40px" alt="foodie reviews">
+                <img src="/static/reviewapp/images/frlogo3.png" height="100px" alt="foodie reviews">
             </a>
-
-            <ul class="nav navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="{% url 'reviewapp:home' %}">Home</a></li>
-            </ul>
-
+           <ul class="nav navbar-nav mr-auto nav-box-bar">
+                <li class="nav-item"><a class="nav-link" href="{% url 'reviewapp:home' %}"><div class="nav-box">| Home |</a></li>
+            </ul> 
             {% if user.is_authenticated %}
             <ul class="nav navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="{% url 'reviewapp:user_review' %}">View your Reviews</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'reviewapp:user_review' %}">| View your Reviews |</a></li>
             </ul>
             <span class="navbar-text" style="margin-right:20px">Hello, {{user.username}}!</span>
 
@@ -56,6 +56,7 @@
             </a>
             {% endif %}
         </nav>
+        
         {% block content %}
         {% endblock %}
     </main>

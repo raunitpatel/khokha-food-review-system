@@ -36,7 +36,11 @@ urlpatterns = [
     path('api/category_image/', views.GetCategoryImage.as_view(), name="category_image"),
 
     # ex: /reviewapp/review/delete/
-     path('review/delete/', views.ReviewDeleteView.as_view(), name='review_delete'),
+    path('review/delete/', views.ReviewDeleteView.as_view(), name='review_delete'),
+
+    # ex/review/api/restaurant_image/
+    path('api/restaurant_image/', views.GetRestaurantImage.as_view(), name='restaurant_image'),
+
 
     
 ]
