@@ -41,28 +41,32 @@ Sort dishes/food items based on various factors.
 After extracting the .zip file, a folder named ByteBite will be created. Open that folder in the terminal. Once you are in that folder in terminal, type following commonds.
 If you are on base environment,type:
 
+```
 conda deactivate
 cd ..
 pip install virtualenv
+```
 
 This will install your virtual environment. Now create a virtual environment with the name 'env'.
-
+```
 virtualenv env
+```
 
 Get back into the Project folder:
-
+```
 cd ByteBite
+```
 
 Now to install requirements for this project, type the following command:
-
+```
 pip install -r requirements.txt
-
+```
 Now that all required libraries and framweworks are installed, type these final lines of command to execute the website:
-
+```
 python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
-
+```
 This will host the site on your local port(default:8000).
 
 To access the website, and on url section, type:
