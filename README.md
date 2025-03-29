@@ -85,5 +85,5 @@ Raunit Patel
 Prakhar Punj
 
 ### Guided by:
-Prof. Teena Sharma
-Python Programming Lab
+- Prof. Teena Sharma
+- Python Programming Lab
